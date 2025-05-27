@@ -3,7 +3,8 @@ import mongoose, { Schema } from "mongoose";
 const userSchema = new Schema({
     email: { type: String , unique: true },
     password: String,
-    name: String
+    name: String,
+    userVideos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }]
 });
 
 const videoSchema = new Schema({
@@ -14,10 +15,10 @@ const videoSchema = new Schema({
     userId: mongoose.Schema.ObjectId
 });
 
-const userModel = mongoose.model("User", userSchema);
-const videoModel = mongoose.model("video", videoSchema);
+const User = mongoose.model("User", userSchema);
+const Video = mongoose.model("video", videoSchema);
 
 export {
-    userModel,
-    videoModel
-}
+    User,
+    Video
+};
