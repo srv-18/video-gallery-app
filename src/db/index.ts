@@ -2,17 +2,17 @@ import mongoose, { Schema } from "mongoose";
 
 const userSchema = new Schema({
     email: { type: String , unique: true },
-    password: String,
-    name: String,
+    password: { type: String , require: true },
+    name: { type: String , require: true },
     userVideos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }]
 });
 
 const videoSchema = new Schema({
-    title: String,
-    description: String,
-    thumbnail: String,
-    videoUrl: String,
-    userId: mongoose.Schema.ObjectId
+    title: { type: String , require: true },
+    description: { type: String , require: true },
+    thumbnail: { type: String , require: true },
+    videoUrl: { type: String , require: true },
+    userId: { type: mongoose.Schema.ObjectId, require: true }
 });
 
 const User = mongoose.model("User", userSchema);

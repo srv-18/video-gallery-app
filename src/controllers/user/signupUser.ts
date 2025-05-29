@@ -4,6 +4,10 @@ import bcrypt from "bcrypt";
 
 export const signupUser = async (req: Request, res: Response) => {
     const { email, password, name } = req.body;
+    if(!email || !password || !name) {
+        res.status(401).json({ "error": "Invalid Input" });
+        return;
+    }
     
     try {
         const userWithEmail = await User.findOne({ email });

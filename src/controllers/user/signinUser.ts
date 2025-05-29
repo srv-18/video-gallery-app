@@ -6,6 +6,10 @@ import env from "../../env/variables";
 
 export const signinUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
+    if(!email || !password) {
+        res.status(401).json({ "error": "Invalid Input" });
+        return;
+    }
     
     try {
         const user = await User.findOne({ email });
