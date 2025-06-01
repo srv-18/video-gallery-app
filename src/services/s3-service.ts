@@ -41,7 +41,6 @@ export const uploadToS3Storage = async (file: Express.Multer.File) => {
 
 export const deleteFromS3Storage = async (fileUrl: string) => {
     try {
-        console.log(fileUrl);
         const key = fileUrl.split(`${env.S3_BUCKET_NAME}/`)[1];
         
         await s3.deleteObject({

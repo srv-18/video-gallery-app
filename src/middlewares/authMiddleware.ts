@@ -8,7 +8,7 @@ export const authMiddleware = (
   next: NextFunction,
 ) => {
   try {
-    const token = req.cookies.jwt;
+    const token = req.cookies.jwt || req.headers.authorization!;
     if (!token) {
         res
         .status(401)
@@ -18,7 +18,7 @@ export const authMiddleware = (
 
     const decoded = jwt.verify(token, env.JWT_SECRET ) as JwtPayload;
     if(!decoded.id) {
-        res.status(401).json({ "error": "User not authenticated" });
+        res.status(401).json({ "error": "Token verification failed" });
         return;
     }
 

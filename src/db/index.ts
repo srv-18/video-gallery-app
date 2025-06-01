@@ -16,7 +16,7 @@ const videoSchema = new Schema({
 });
 
 const User = mongoose.model("User", userSchema);
-const Video = mongoose.model("video", videoSchema);
+const Video = mongoose.model("Video", videoSchema);
 
 export {
     User,

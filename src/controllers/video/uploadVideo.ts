@@ -46,7 +46,16 @@ export const uploadVideo = async (req: Request, res: Response) => {
             return;
         }
 
-        res.status(200).json({ "message": "Video uploaded successfully" });
+        res.status(200).json({ "message": "Video uploaded successfully" ,
+            video: {
+                id: uploadedVideo._id,
+                title: uploadedVideo.title,
+                description: uploadedVideo.description,
+                thumbnail: uploadedVideo.thumbnail,
+                videoUrl: uploadedVideo.videoUrl,
+                userId: uploadedVideo.userId
+            }
+        });
     } catch (error) {
         res.status(500).json({ "error": "Internal server error" });
         return;

@@ -28,9 +28,19 @@ export const signinUser = async (req: Request, res: Response) => {
 
         res.cookie("jwt", jwtToken, {
             httpOnly: true,
+            sameSite: 'none',
+            secure: false,
             maxAge: 14*24*3600000  // 2 weeks
-        }).status(200).json({
-            "message": "successfully signin"
+        });
+        res.status(200).json({
+            "message": "successfully signin",
+            "user": {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                userVideos: user.userVideos
+            },
+            "token": jwtToken
         });
         return;
     } catch (error) {

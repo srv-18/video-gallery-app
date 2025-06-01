@@ -10,7 +10,16 @@ export const getAllVideos = async (req: Request, res: Response) => {
             return;
         }
 
-        res.status(200).json({ videos });
+        res.status(200).json(
+            videos.map(v => ({
+                id: v._id,
+                title: v.title,
+                description: v.description,
+                thumbnail: v.thumbnail,
+                videoUrl: v.videoUrl,
+                userId: v.userId
+            }))
+        );
     } catch (error) {
         res.status(500).json({ "internal error": error });
         return;
