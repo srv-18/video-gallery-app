@@ -65,7 +65,7 @@ export const getPresignedUrl = async (fileName: string) => {
         CORSConfiguration: {
           CORSRules: [
             {
-              AllowedOrigins: ["http://localhost:5173", "http://127.0.0.1:5173"],
+              AllowedOrigins: [`${env.FRONTEND_URL}`, "http://localhost:5173", "http://127.0.0.1:5173"],
               AllowedMethods: ["GET", "PUT", "POST"],
               AllowedHeaders: ["*"],
               ExposeHeaders: ["ETag"],
