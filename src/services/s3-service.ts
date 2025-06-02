@@ -1,6 +1,8 @@
-import { S3 } from "@aws-sdk/client-s3";
+import { PutBucketCorsCommand, PutObjectCommand, S3 } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import env from "../env/variables";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import mime from "mime-types";
 
 const s3 = new S3({
   endpoint: env.S3_ENDPOINT as string,
@@ -51,4 +53,37 @@ export const deleteFromS3Storage = async (fileUrl: string) => {
         console.error("Error deleting file from S3:", error);
         throw error;
     }
+};
+
+export const getPresignedUrl = async (fileName: string) => {
+    const contentType = mime.lookup(fileName) || "application/octet-stream";
+    const safeFilename = fileName.replace( /[^a-zA-Z0-9.-]/g, "_" );
+    const fileKey = `${Date.now()}-${safeFilename}`;
+
+    const params = {
+        Bucket: env.S3_BUCKET_NAME,
+        CORSConfiguration: {
+          CORSRules: [
+            {
+              AllowedOrigins: ["http://localhost:5173", "http://127.0.0.1:5173"],
+              AllowedMethods: ["GET", "PUT", "POST"],
+              AllowedHeaders: ["*"],
+              ExposeHeaders: ["ETag"],
+              MaxAgeSeconds: 3000,
+            },
+          ],
+        },
+    };
+    await s3.send(new PutBucketCorsCommand(params));
+
+    const command = new PutObjectCommand({
+        Bucket: env.S3_BUCKET_NAME as string,
+        Key: fileKey,
+        ContentType: contentType,
+        ACL: "public-read"
+    });
+    const url = await getSignedUrl(s3, command, {
+        expiresIn: 3600,
+    });
+    return { url, key: fileKey };
 };
